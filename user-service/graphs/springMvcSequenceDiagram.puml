@@ -1,0 +1,35 @@
+@startuml
+title 手写SpringMVC实现核心流程时序图
+
+actor User as user
+participant WebServletContainerInitializer as SCI
+participant AbstractDispatcherServletInitializer
+participant WebApplicationContext
+participant DispatcherServlet
+participant BaseHttpServlet
+participant RequestMappingHandlerMethodAdapter
+
+autonumber
+user -> SCI : 利用SPI调用其onStartup()
+activate SCI
+SCI -> AbstractDispatcherServletInitializer:调用initializer的onStartup()方法
+activate AbstractDispatcherServletInitializer
+AbstractDispatcherServletInitializer -> WebApplicationContext:创建子容器
+activate AbstractDispatcherServletInitializer
+AbstractDispatcherServletInitializer -> DispatcherServlet : 创建DispatcherServlet
+activate DispatcherServlet
+DispatcherServlet->BaseHttpServlet : 调用父类init()方法
+activate BaseHttpServlet
+BaseHttpServlet->DispatcherServlet : 调用子类onRefresh方法初始化映射器，适配器，异常处理器
+activate DispatcherServlet
+DispatcherServlet->AbstractHandlerMapping : 由于AbstractHandlerMapping实现InitializingBean接口初始化调用afterPropertiesSet方法，找到HandlerMethod
+activate AbstractHandlerMapping
+AbstractHandlerMapping-> RequestMappingHandlerMapping:调用子类detectHandlerMethod()方法收集局部异常解析器类型转化器，解析路径注册HandlerMethod
+activate RequestMappingHandlerMapping
+RequestMappingHandlerMapping -> AbstractHandlerMapping : 调用父类注册方法，注册HandlerMethod到内部类MapperRegister中
+activate DispatcherServlet
+DispatcherServlet -> RequestMappingHandlerMethodAdapter : 由于RequestMappingHandlerMethodAdapter实现InitializingBean接口初始化调用afterPropertiesSet方法,添加参数解析器，类型转换器，返回值处理器
+activate DispatcherServlet
+DispatcherServlet -> ExceptionHandlerExceptionResolver : 由于ExceptionHandlerExceptionResolver实现InitializingBean接口初始化调用afterPropertiesSet方法,添加异常处理器，参数解析器，返回值处理器
+@enduml
+

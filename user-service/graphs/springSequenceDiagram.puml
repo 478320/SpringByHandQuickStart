@@ -1,0 +1,20 @@
+@startuml
+title 手写Spring注解实现核心流程时序图
+
+actor User as user
+participant AnnotationConfigApplicationContext as context
+participant AbstractApplicationContext
+participant DefaultListableBeanFactory as df
+participant DefaultSingletonBeanRegistry as dfr
+
+autonumber
+user -> context : 创建Spring注解容器
+activate context
+context -> AbstractApplicationContext:调用refresh方法刷新档案馆
+activate AbstractApplicationContext
+AbstractApplicationContext -> context:调用obtainFreshBeanFactory()中refreshBeanFactory()的方法刷新档案馆加载Bean的定义信息
+activate context
+context -> df : 扫描并获得bean的定义信息
+activate context
+context->dfr : 创建并存储Bean实例
+@enduml

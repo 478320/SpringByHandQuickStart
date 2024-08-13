@@ -1,0 +1,37 @@
+@startuml
+title 手写SpringMVC实现核心流程时序图
+
+actor User as user
+participant DispatcherServlet
+participant AbstractHandlerMapping
+participant RequestMappingHandlerMapping
+participant HandlerExecutionChain
+participant RequestMappingHandlerMethodAdapter
+participant ServletInvocableMethod
+participant HandlerExceptionResolver
+
+autonumber
+user -> DispatcherServlet : 用户发送请求调用service方法
+activate DispatcherServlet
+DispatcherServlet -> AbstractHandlerMapping:service中调用getHandler()方法尝试获取HandlerExecutionChain
+activate AbstractHandlerMapping
+AbstractHandlerMapping -> RequestMappingHandlerMapping:调用子类getHandlerInternal()方法,并给获取到的chain添加对应路径拦截器
+activate RequestMappingHandlerMapping
+RequestMappingHandlerMapping -> AbstractHandlerMapping : 调用父类lockUpPath从内部类MapperRegister查找到路径对应的HandlerMethod
+deactivate AbstractHandlerMapping
+AbstractHandlerMapping -> DispatcherServlet : 将得到的映射器链返回给DispatcherServlet
+activate DispatcherServlet
+DispatcherServlet->HandlerExecutionChain : 使用HandlerExecutionChain进行拦截器操作
+activate DispatcherServlet
+DispatcherServlet->RequestMappingHandlerMethodAdapter : 调用适配器handler方法
+activate RequestMappingHandlerMethodAdapter
+RequestMappingHandlerMethodAdapter->ServletInvocableMethod : 创建ServletInvocableMethod在ServletInvocableMethod中调用invokeAndHandle方法解析参数，转化类型，处理返回值
+activate DispatcherServlet
+DispatcherServlet-> HandlerExecutionChain:使用HandlerExecutionChain进行拦截器操作
+activate DispatcherServlet
+DispatcherServlet->HandlerExceptionResolver:调用HandlerExceptionResolver中resolveException()方法尝试对异常进行处理
+deactivate DispatcherServlet
+DispatcherServlet -> user:返回最终结果
+@enduml
+
+

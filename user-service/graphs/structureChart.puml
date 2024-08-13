@@ -1,0 +1,45 @@
+@startuml
+package springframework {
+    package annotation {
+    }
+    package annotationAop {
+    }
+    package annotationTransactional {
+
+    }
+    package beans {
+        package factory {
+            package config
+            package parsing
+            package support
+            package xml
+        }
+
+    }
+    package configAop {
+
+    }
+    package context {
+        package annotation
+        package support
+    }
+    package core {
+        package io{
+        package support
+        }
+        package metrics
+        package support
+        package type
+    }
+    package coreAop{
+    }
+    package coreTransactional{
+    }
+    package jdbc {
+    }
+    package stereotype{
+    }
+    package util{
+    }
+}
+@enduml

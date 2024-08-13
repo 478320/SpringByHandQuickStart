@@ -1,0 +1,16 @@
+@startuml
+title 手写SpringBoot实现核心流程时序图
+
+actor User as user
+
+actor User as user
+participant HuayuSpringApplication
+participant TomcatWebServer
+
+autonumber
+user -> HuayuSpringApplication : 调用start方法
+activate HuayuSpringApplication
+HuayuSpringApplication -> HuayuSpringApplication :调用getWebServer获得Web
+activate HuayuSpringApplication
+HuayuSpringApplication->TomcatWebServer:调用其start方法启动容器
+@enduml
